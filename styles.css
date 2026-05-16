@@ -1,0 +1,427 @@
+/* Shared visibility utility */
+#gsn-panel .gsn-hidden { display: none !important; }
+
+#gsn-panel {
+  position: relative;
+  background: #feee90;
+  border: none;
+  border-left: 2px solid #c9a030;
+  border-bottom: 2px solid #c9a030;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 0 0 12px 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Google Sans", "Roboto", sans-serif;
+  font-size: 13px;
+  color: #5a4010;
+  box-shadow: 0 2px 8px rgba(91,64,0,0.15);
+  flex-shrink: 0;
+  align-self: flex-start; /* prevent stretching in Gmail's flex reading pane */
+  transition: width 0.15s ease, padding 0.15s ease;
+}
+
+/* ── Collapsed: sticky-note square floating top-right ── */
+#gsn-panel.gsn-collapsed {
+  position: absolute;
+  top: 3px;
+  right: 17px;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  background: var(--gsn-postit-url) center/cover no-repeat transparent;
+  cursor: pointer;
+  overflow: visible;
+  margin: 0;
+  z-index: 1000;
+}
+
+#gsn-panel.gsn-collapsed #gsn-header {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+#gsn-panel.gsn-collapsed #gsn-title-text,
+#gsn-panel.gsn-collapsed #gsn-btn-add {
+  display: none;
+}
+
+#gsn-collapsed-plus {
+  display: none;
+}
+
+#gsn-panel.gsn-collapsed #gsn-collapsed-plus {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  font-weight: 600;
+  color: #b8922a;
+  pointer-events: none;
+  line-height: 1;
+}
+
+#gsn-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  min-height: 12px;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+#gsn-header[data-tooltip]:hover::after,
+#gsn-header[data-tooltip]:focus-visible::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(60, 40, 0, 0.85);
+  color: #fff;
+  font-size: 11px;
+  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  animation: gsn-tooltip-in 0s 0.4s forwards;
+}
+
+#gsn-header[data-tooltip]:has(#gsn-btn-add:is(:hover, :focus))::after {
+  display: none;
+}
+
+#gsn-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5c3a00;
+  letter-spacing: 0.2px;
+  flex: 1;
+}
+
+#gsn-btn-add {
+  background: #b8922a;
+  border: none;
+  border-radius: 4px;
+  width: 18px;
+  height: 18px;
+  line-height: 17px;
+  text-align: center;
+  font-size: 14px;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+#gsn-btn-add:hover { background: #a07828; }
+
+#gsn-btn-add[data-tooltip] { position: relative; }
+
+#gsn-btn-add[data-tooltip]:hover::after,
+#gsn-btn-add[data-tooltip]:focus-visible::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  right: 0;
+  background: rgba(60, 40, 0, 0.85);
+  color: #fff;
+  font-size: 11px;
+  white-space: nowrap;
+  padding: 3px 8px;
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  animation: gsn-tooltip-in 0s 0.4s forwards;
+}
+
+@keyframes gsn-tooltip-in {
+  to { opacity: 1; }
+}
+
+#gsn-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  min-height: 24px;
+  max-height: 220px;
+  overflow-y: auto;
+  border-radius: 4px;
+  margin-top: 8px;
+  transition: background 0.15s;
+}
+
+#gsn-body:hover { background: rgba(91, 64, 0, 0.06); }
+
+#gsn-empty {
+  color: #6b4f00;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.gsn-note {
+  background: #fef5c0;
+  border: none;
+  border-left: 1px solid #d4a800;
+  border-bottom: 1px solid #d4a800;
+  border-radius: 5px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: default;
+}
+
+.gsn-note.gsn-dragging { opacity: 0.4; }
+.gsn-note.gsn-drag-over { border-color: #7b5800; box-shadow: 0 0 0 2px rgba(123,88,0,0.3); }
+
+.gsn-drag-handle {
+  color: #b8922a;
+  font-size: 14px;
+  cursor: grab;
+  flex-shrink: 0;
+  user-select: none;
+  padding-top: 1px;
+}
+.gsn-drag-handle:active { cursor: grabbing; }
+
+.gsn-note-text {
+  flex: 1;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.5;
+  font-size: 13px;
+}
+
+.gsn-note-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.gsn-note-date {
+  font-size: 10px;
+  color: #6b4f00;
+}
+
+.gsn-note-edit {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #b8922a;
+  font-size: 13px;
+  padding: 0;
+  line-height: 1;
+}
+.gsn-note-edit:hover { color: #5c4000; }
+
+.gsn-note-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #c8a050;
+  font-size: 13px;
+  padding: 0;
+  line-height: 1;
+}
+.gsn-note-delete:hover { color: #e53935; }
+
+/* ── Inline edit mode ── */
+.gsn-edit-area { width: 100%; }
+
+.gsn-edit-textarea {
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 7px;
+  font-size: 13px;
+  font-family: inherit;
+  background: #fef5c0;
+  resize: vertical;
+  min-height: 52px;
+  box-sizing: border-box;
+  color: #5a4010;
+}
+.gsn-edit-textarea:focus { outline: none; border-color: #5c4000; box-shadow: 0 0 0 2px #7b5800; }
+
+.gsn-edit-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.gsn-edit-char-count {
+  font-size: 10px;
+  color: #6b4f00;
+}
+
+.gsn-edit-btns { display: flex; gap: 5px; }
+
+.gsn-edit-save {
+  background: #c9a030;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+}
+.gsn-edit-save:hover { background: #a07828; }
+
+.gsn-edit-cancel {
+  background: #e8d890;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: #5c4000;
+  cursor: pointer;
+}
+.gsn-edit-cancel:hover { background: #d4c070; }
+
+#gsn-input-area {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#gsn-input-area.gsn-hidden { display: none; }
+
+#gsn-textarea {
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 13px;
+  font-family: inherit;
+  background: #fef5c0;
+  resize: vertical;
+  min-height: 60px;
+  box-sizing: border-box;
+  color: #5a4010;
+}
+#gsn-textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #7b5800;
+}
+
+/* ── Undo bar ── */
+#gsn-undo-bar {
+  font-size: 11px;
+  color: #6b4f00;
+  text-align: right;
+  margin-top: 4px;
+}
+#gsn-undo-bar.gsn-hidden { display: none; }
+
+#gsn-undo-btn {
+  background: none;
+  border: none;
+  color: #5c4000;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* ── Storage warning ── */
+#gsn-storage-warning {
+  font-size: 11px;
+  color: #e53935;
+  margin-top: 4px;
+}
+#gsn-storage-warning.gsn-hidden { display: none; }
+
+/* ── Character counter ── */
+#gsn-char-counter {
+  font-size: 10px;
+  color: #6b4f00;
+  text-align: right;
+}
+#gsn-char-counter.gsn-hidden { display: none; }
+#gsn-char-counter.gsn-char-urgent { color: #e53935; font-weight: 600; }
+
+#gsn-input-btns {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+#gsn-save {
+  background: #c9a030;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+}
+#gsn-save:hover { background: #a07828; }
+
+#gsn-cancel {
+  background: #e8d890;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 14px;
+  font-size: 12px;
+  color: #5c4000;
+  cursor: pointer;
+}
+#gsn-cancel:hover { background: #d4c070; }
+
+/* ── Resize handle ── */
+#gsn-resize-handle { display: none; }
+
+#gsn-panel:not(.gsn-collapsed) #gsn-resize-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10px;
+  cursor: ns-resize;
+  color: #c9a030;
+  font-size: 16px;
+  letter-spacing: 2px;
+  user-select: none;
+  margin: 2px 0 -4px;
+  opacity: 0.6;
+}
+#gsn-panel:not(.gsn-collapsed) #gsn-resize-handle:hover {
+  opacity: 1;
+  color: #7b5800;
+}
+
+/* ── Email list badge ── */
+.gsn-list-badge {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  pointer-events: none;
+  position: relative;
+  top: -1px;
+  object-fit: contain;
+}

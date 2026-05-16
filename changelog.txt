@@ -1,0 +1,41 @@
+v1.0.0 patch 2 — UI fixes (2026-05-16)
+- Fix: tooltip permanently visible — header tabindex="0" retained focus after click,
+  keeping :focus active; changed :focus to :focus-visible on both header and + button
+  tooltips so they only show on keyboard navigation
+- Fix: panel stretched full height of reading pane — div.adn.ads is a flex container
+  with align-items:stretch; added align-self:flex-start to #gsn-panel
+
+v1.0.0 — Initial scope/build
+- Ported from Outlook Sticky Notes v1.0.2
+- Gmail-specific thread key extraction from URL hash (new format: mixed-case 16+ chars; legacy: 16-char hex)
+- Injection target: div.adn.ads (Gmail's reading pane), with fallbacks
+- Navigation: hashchange as primary trigger (Gmail is hash-routed)
+- Thread list badges via tr[data-thread-id] / tr[data-legacy-thread-id] attributes
+- Badge target: .y6 (subject cell) within thread row
+- No match_origin_as_fallback — Gmail pop-out uses a real mail.google.com URL
+- No legacy key migration — fresh extension
+- All osn_ prefixes replaced with gsn_ throughout
+- Icons: copied from Outlook Sticky Notes extension
+
+v1.0.0 patch — Fix phantom injection + badge selectors (2026-05-16)
+- Bug: panel injected in inbox list view (no thread open) — DOM fallback in getKey() was
+  picking up data-legacy-thread-id from list row <tr> elements; fixed by gating fallback
+  on div.adn.ads being present (reading pane only)
+- Bug: fallback injection targets (div[data-legacy-thread-id], [role=main]) in
+  findInsertionPoint() also matched list view; removed both — only div.adn.ads and
+  pop-out [role=main] are valid injection points
+- Bug: badge selectors too narrow; broadened findThreadRow() to try tr/non-tr variants
+  of both data-thread-id and data-legacy-thread-id; broadened findBadgeTarget() with
+  more td fallbacks
+- Fix: badge approach entirely rewritten — Gmail tr.zA rows have no usable href links
+  or data-thread-id attributes; badge matching now uses two strategies:
+  (1) click interception + jslog decode: capture tr.zA on click, base64-decode the "1:"
+      section of jslog to extract numeric thread ID (thread-f:NUMERICID from JSON payload),
+      store in chrome.storage for persistence across refreshes
+  (2) jslog scan: during polling, decode each visible tr.zA row's jslog and match against
+      stored numeric IDs; badges td:nth-child(4) (subject column)
+- Fix: previous extraction was broken — thread-f:NUMERICID is inside base64-encoded JSON
+  in the jslog "1:" section, not in the raw attribute; regex against raw jslog never matched
+- TODO: test list badges in live Gmail
+- TODO: test thread key extraction on various views (inbox, sent, labels, starred)
+- TODO: test pop-out window

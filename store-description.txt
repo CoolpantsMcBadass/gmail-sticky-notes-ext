@@ -1,0 +1,25 @@
+Gmail Sticky Notes lets you pin private notes and action items directly to the top of any Gmail thread — so the context you need is always right there when you open the conversation.
+
+How it works
+
+Click the sticky note icon that appears on any email thread to expand your notes panel. Add as many notes as you like, drag to reorder them, and edit or delete them at any time. When you're done, collapse the panel back to a small icon that shows your note count at a glance.
+
+A badge also appears in your email list on any thread that has notes attached, so you can see at a glance which conversations have something pinned.
+
+Features
+
+- Pin multiple notes per email thread
+- Reorder notes by dragging or with the keyboard
+- Edit notes inline
+- Undo accidental deletions
+- Badge icons in your email list for threads with notes
+- Works in pop-out email windows
+- Keyboard accessible throughout
+
+Privacy first
+
+All notes are saved locally using your browser's built-in storage. Nothing is sent to any server, logged, or shared — your notes never leave your device.
+
+Supported
+
+- Gmail (mail.google.com)

@@ -2,6 +2,7 @@
 
 **Effective date:** May 16, 2026
 
+
 ## Summary
 
 Gmail Sticky Notes stores your notes locally in your browser. No data is collected, transmitted, or shared.
@@ -16,9 +17,10 @@ None. The extension does not collect, log, or transmit any personal information,
 
 ## Permissions
 
-The extension requests one permission:
+The extension requests the following permissions:
 
 - **storage** — used solely to save and retrieve your notes on your local device.
+- **https://mail.google.com/*** — required to inject the sticky note UI into Gmail threads. No data from Gmail is read or transmitted.
 
 ## Third-party services
 
